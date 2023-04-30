@@ -304,5 +304,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3615a3d99fd0046830e54d39c7c759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chest: {fileID: 0}
+  chest: {fileID: 7494481164576843746, guid: de1ca00ac53db814385c7e1bcb0b16d3, type: 3}
   clearedRoom: 0

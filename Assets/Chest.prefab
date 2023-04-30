@@ -99,5 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestInstantiated: {fileID: 0}
   chestItem: {fileID: 0}
+  s1: {fileID: 21300000, guid: e492cb23d6ad0dc438e46b3521e163ca, type: 3}
+  s2: {fileID: 21300000, guid: 4ad550e7b4480d144899b44da62759b4, type: 3}
+  s3: {fileID: 21300000, guid: a73d468bb93c1944db1a1564726a921c, type: 3}
   chestItems: []
   tier: 0

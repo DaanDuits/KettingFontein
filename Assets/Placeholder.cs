@@ -11,7 +11,7 @@ public class Placeholder : MonoBehaviour
     {
         if (clearedRoom)
         {
-            new Chest(chest, new Vector3(0, 0), new Item(), Random.Range(0,4));
+            new Chest(chest, new Vector3(0, 0), Random.Range(0,3));
             clearedRoom = false;
         }
     }
