@@ -30,19 +30,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (current != null)
+        if (collision.gameObject.name == "Floor")
         {
-            current.walls.enabled = false;
-            current.floor.enabled = false;
+            f = 0;
+            currentCamPos = Camera.main.transform.position;
+            nextCamPos = collision.transform.position - new Vector3(0, 0, 10);
         }
-
-        f = 0;
-        currentCamPos = Camera.main.transform.position;
-        nextCamPos = collision.transform.position - new Vector3(0, 0, 10);
-
-        RoomInstance room = collision.transform.parent.GetComponent<RoomInstance>();
-        room.walls.enabled = true;
-        room.floor.enabled = true;
-        current = room;
     }
 }
