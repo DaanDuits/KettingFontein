@@ -26,6 +26,10 @@ public class EnemyBehaviour : MonoBehaviour
         transform.localScale = dir.x < 0 ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
         transform.GetChild(1).transform.localScale = new Vector3(dir.x < 0 ? -0.01560062f : 0.01560062f, 0.01560062f, 0.01560062f);
 
+        float x = Mathf.Clamp(transform.position.x, room.transform.position.x - 4.65f, room.transform.position.x + 4.65f);
+        float y = Mathf.Clamp(transform.position.y, room.transform.position.y- 3.65f, room.transform.position.y + 3.15f);
+        transform.position = new Vector3(x, y);
+
         if (dir != Vector3.zero)
         {
             animator.SetBool("isWalking", true);
