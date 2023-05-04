@@ -5,26 +5,46 @@ using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
 {
+	int[] floorSeeds = new int[15];
+	public int floorIndex;
+	public int seed;
 	RoomSelector selector;
 	public Vector2 worldSize = new Vector2(4, 4);
 	public Room[,] rooms;
-	public List<Vector2> takenPositions = new List<Vector2>();
+	List<Vector2> takenPositions = new List<Vector2>();
+	public List<Vector2> exitPositions = new List<Vector2>();
 	int gridSizeX, gridSizeY;
 	public int numberOfRooms = 20;
+	public float roomUnitWidth , roomUnitHeight;
+
 	void Start()
 	{
+		Random.InitState(seed);
+
 		selector = gameObject.GetComponent<RoomSelector>();
+		for (int i = 0; i < 15; i++)
+        {
+			Random.InitState(Random.Range(-100000, 100000));
 
-		if (numberOfRooms >= (worldSize.x * 2) * (worldSize.y * 2))
-			numberOfRooms = Mathf.RoundToInt((worldSize.x * 2) * (worldSize.y * 2));
+			if (numberOfRooms >= (worldSize.x * 2) * (worldSize.y * 2))
+				numberOfRooms = Mathf.RoundToInt((worldSize.x * 2) * (worldSize.y * 2));
 
-		gridSizeX = Mathf.RoundToInt(worldSize.x);
-		gridSizeY = Mathf.RoundToInt(worldSize.y);
-		CreateRooms();
-		SetRoomDoors();
-		SetExit();
-		selector.SetRooms();
+			gridSizeX = Mathf.RoundToInt(worldSize.x);
+			gridSizeY = Mathf.RoundToInt(worldSize.y);
+			CreateRooms();
+			SetRoomDoors();
+			SetExit(i);
+			selector.SetFloor((worldSize.x * roomUnitWidth) * 2 * i);
+			takenPositions.Clear();
+		}
 	}
+	public Vector3 GetRoomPosition(int i)
+	{
+		Debug.Log(i);
+		floorIndex = i;
+		return new Vector3((worldSize.x * roomUnitWidth) * 2 * i, 0);
+	}
+
 	void CreateRooms()
 	{
 		rooms = new Room[gridSizeX * 2, gridSizeY * 2];
@@ -168,13 +188,40 @@ public class RoomGenerator : MonoBehaviour
 			}
 		}
 	}
-	void SetExit()
+	void SetExit(int i)
     {
-		int x = Random.Range(0, rooms.GetLength(0));
-		int y = Random.Range(0, rooms.GetLength(1));
-		if (rooms[x, y] != null && x != worldSize.x && y != worldSize.y)
-			rooms[x, y].type = 2;
+		bool left = Random.Range(0, 2) == 1;
+        if (left)
+        {
+			for (int x = 0; x < rooms.GetLength(0); x++)
+			{
+				for (int y = 0; y < rooms.GetLength(1); y++)
+				{
+					int isExit = Random.Range(0, 101);
+					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && rooms[x, y] != null)
+					{
+						rooms[x, y].type = 2;
+						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * i, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
+						return;
+					}
+				}
+			}
+		}
 		else
-			SetExit();
+        {
+			for (int x = rooms.GetLength(0) - 1; x >= 0 ; x--)
+			{
+				for (int y = rooms.GetLength(1) - 1; y >= 0 ; y--)
+				{
+					int isExit = Random.Range(0, 101);
+					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && rooms[x, y] != null)
+					{
+						rooms[x, y].type = 2;
+						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * i, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
+						return;
+					}
+				}
+			}
+		}
 	}
 }
