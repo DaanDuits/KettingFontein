@@ -156,6 +156,13 @@ MonoBehaviour:
   animator: {fileID: 7892212313008905546}
   room: {fileID: 0}
   healthBar: {fileID: 6696312517656907114}
+  enemyFloorValues:
+  - hp: 100
+    damage: 5
+    drops:
+    - object: {fileID: 9021907803416742570, guid: ca52e6e59ea8775468894e286d038c15, type: 3}
+      dropsMinAmount: 1
+      dropsMaxAmount: 5
 --- !u!61 &3706679847303394749
 BoxCollider2D:
   m_ObjectHideFlags: 0

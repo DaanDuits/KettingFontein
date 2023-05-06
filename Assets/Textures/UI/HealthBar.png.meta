@@ -112,7 +112,7 @@ TextureImporter:
         width: 104
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -133,7 +133,7 @@ TextureImporter:
         width: 17
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -154,7 +154,7 @@ TextureImporter:
         width: 104
         height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -162,6 +162,27 @@ TextureImporter:
       bones: []
       spriteID: 337c4a3f8bd557946bba8e2fc316b6d9
       internalID: -898099825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthBar_3
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c97ac8961ecaf44dbe2e184d32c4d49
+      internalID: 1942487394
       vertices: []
       indices: 
       edges: []
@@ -177,6 +198,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      HealthBar_3: 1942487394
       HealthBar_0: -898099825
       HealthBar_2: 373221089
       HealthBar_1: -950532898

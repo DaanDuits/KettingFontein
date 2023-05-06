@@ -11,6 +11,7 @@ public class RoomBehaviour : MonoBehaviour
     public static float spawnRate = 1.5f;
     public static int maxEnemies = 20, minEnemies = 4;
     public int enemiesInRoom;
+    public int floorIndex;
     int spawnedEnemies, maxEnemiesInRoom;
     bool canSpawn;
     float spawnTimer;

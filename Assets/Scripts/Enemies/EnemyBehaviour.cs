@@ -10,6 +10,9 @@ public class EnemyBehaviour : MonoBehaviour
     Vector3 offset;
     public RoomBehaviour room;
     public Slider healthBar;
+
+    public EnemyFloorValue[] enemyFloorValues;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +51,28 @@ public class EnemyBehaviour : MonoBehaviour
         if (healthBar.value == 0)
         {
             room.enemiesInRoom--;
+            for (int i = 0; i <enemyFloorValues[room.floorIndex].drops.Length; i++)
+            {
+                Instantiate(enemyFloorValues[room.floorIndex].drops[i].@object, transform.position, Quaternion.identity).GetComponent<EnemyDropBehaviour>().amount =
+                    new System.Random().Next(enemyFloorValues[room.floorIndex].drops[i].dropsMinAmount, enemyFloorValues[room.floorIndex].drops[i].dropsMaxAmount);
+            }
             Destroy(gameObject);
         }
+    }
+
+    [System.Serializable]
+    public struct EnemyFloorValue
+    {
+        public int hp;
+        public int damage;
+        public Drop[] drops;
+    }
+    [System.Serializable]
+    public struct Drop
+    {
+
+        public GameObject @object;
+        public int dropsMinAmount;
+        public int dropsMaxAmount;
     }
 }

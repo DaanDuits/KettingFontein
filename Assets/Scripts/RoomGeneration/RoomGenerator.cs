@@ -10,7 +10,7 @@ public class RoomGenerator : MonoBehaviour
 	public int seed;
 	RoomSelector selector;
 	public Vector2 worldSize = new Vector2(4, 4);
-	public Room[,] rooms;
+	public Room[][,] floors = new Room[15][,];
 	List<Vector2> takenPositions = new List<Vector2>();
 	public List<Vector2> exitPositions = new List<Vector2>();
 	int gridSizeX, gridSizeY;
@@ -31,10 +31,10 @@ public class RoomGenerator : MonoBehaviour
 
 			gridSizeX = Mathf.RoundToInt(worldSize.x);
 			gridSizeY = Mathf.RoundToInt(worldSize.y);
-			CreateRooms();
-			SetRoomDoors();
+			CreateRooms(i);
+			SetRoomDoors(i);
 			SetExit(i);
-			selector.SetFloor((worldSize.x * roomUnitWidth) * 2 * i);
+			selector.SetFloor(i, (worldSize.x * roomUnitWidth) * 2 * i);
 			takenPositions.Clear();
 		}
 	}
@@ -45,10 +45,10 @@ public class RoomGenerator : MonoBehaviour
 		return new Vector3((worldSize.x * roomUnitWidth) * 2 * i, 0);
 	}
 
-	void CreateRooms()
+	void CreateRooms(int floor)
 	{
-		rooms = new Room[gridSizeX * 2, gridSizeY * 2];
-		rooms[gridSizeX, gridSizeY] = new Room(Vector2.zero, 0);
+		floors[floor] = new Room[gridSizeX * 2, gridSizeY * 2];
+		floors[floor][gridSizeX, gridSizeY] = new Room(Vector2.zero, 0);
 		takenPositions.Insert(0, Vector2.zero);
 		Vector2 checkPos = Vector2.zero;
 		float randomCompare = 0.2f, randomCompareStart = 0.2f, randomCompareEnd = 0.01f;
@@ -71,7 +71,7 @@ public class RoomGenerator : MonoBehaviour
 					print("error: could not create with fewer neighbors than : " + NumberOfNeighbours(checkPos, takenPositions));
 			}
 
-			rooms[(int)checkPos.x + gridSizeX, (int)checkPos.y + gridSizeY] = new Room(checkPos, 1);
+			floors[floor][(int)checkPos.x + gridSizeX, (int)checkPos.y + gridSizeY] = new Room(checkPos, 1);
 			takenPositions.Insert(0, checkPos);
 		}
 	}
@@ -156,52 +156,52 @@ public class RoomGenerator : MonoBehaviour
 			ret++;
 		return ret;
 	}
-	void SetRoomDoors()
+	void SetRoomDoors(int floor)
 	{
 		for (int x = 0; x < ((gridSizeX * 2)); x++)
 		{
 			for (int y = 0; y < ((gridSizeY * 2)); y++)
 			{
-				if (rooms[x, y] == null)
+				if (floors[floor][x, y] == null)
 					continue;
 
 				Vector2 gridPosition = new Vector2(x, y);
 				if (y - 1 < 0)
-					rooms[x, y].doorBottom = false;
+					floors[floor][x, y].doorBottom = false;
 				else
-					rooms[x, y].doorBottom = (rooms[x, y - 1] != null);
+					floors[floor][x, y].doorBottom = (floors[floor][x, y - 1] != null);
 
 				if (y + 1 >= gridSizeY * 2)
-					rooms[x, y].doorTop = false;
+					floors[floor][x, y].doorTop = false;
 				else
-					rooms[x, y].doorTop = (rooms[x, y + 1] != null);
+					floors[floor][x, y].doorTop = (floors[floor][x, y + 1] != null);
 
 				if (x - 1 < 0)
-					rooms[x, y].doorLeft = false;
+					floors[floor][x, y].doorLeft = false;
 				else
-					rooms[x, y].doorLeft = (rooms[x - 1, y] != null);
+					floors[floor][x, y].doorLeft = (floors[floor][x - 1, y] != null);
 
 				if (x + 1 >= gridSizeX * 2)
-					rooms[x, y].doorRight = false;
+					floors[floor][x, y].doorRight = false;
 				else
-					rooms[x, y].doorRight = (rooms[x + 1, y] != null);
+					floors[floor][x, y].doorRight = (floors[floor][x + 1, y] != null);
 			}
 		}
 	}
-	void SetExit(int i)
+	void SetExit(int floor)
     {
 		bool left = Random.Range(0, 2) == 1;
         if (left)
         {
-			for (int x = 0; x < rooms.GetLength(0); x++)
+			for (int x = 0; x < floors[floor].GetLength(0); x++)
 			{
-				for (int y = 0; y < rooms.GetLength(1); y++)
+				for (int y = 0; y < floors[floor].GetLength(1); y++)
 				{
 					int isExit = Random.Range(0, 101);
-					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && rooms[x, y] != null)
+					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && floors[floor][x, y] != null)
 					{
-						rooms[x, y].type = 2;
-						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * i, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
+						floors[floor][x, y].type = 2;
+						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * floor, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
 						return;
 					}
 				}
@@ -209,15 +209,15 @@ public class RoomGenerator : MonoBehaviour
 		}
 		else
         {
-			for (int x = rooms.GetLength(0) - 1; x >= 0 ; x--)
+			for (int x = floors[floor].GetLength(0) - 1; x >= 0 ; x--)
 			{
-				for (int y = rooms.GetLength(1) - 1; y >= 0 ; y--)
+				for (int y = floors[floor].GetLength(1) - 1; y >= 0 ; y--)
 				{
 					int isExit = Random.Range(0, 101);
-					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && rooms[x, y] != null)
+					if (isExit <= 25 && x != worldSize.x && y != worldSize.y && floors[floor][x, y] != null)
 					{
-						rooms[x, y].type = 2;
-						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * i, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
+						floors[floor][x, y].type = 2;
+						exitPositions.Add(new Vector2(x * roomUnitWidth + worldSize.x * roomUnitWidth * 2 * floor, y * roomUnitHeight) - (worldSize * new Vector2(11.33f, 8.98f)));
 						return;
 					}
 				}
