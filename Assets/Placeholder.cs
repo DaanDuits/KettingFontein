@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Placeholder : MonoBehaviour
 {
     public GameObject chest;
     public bool clearedRoom;
+    public int currency = 1000;
+    public TMP_Text itemNameTMP;
     public Chest c;
     public Sprite s1;
     public Sprite s2;
@@ -19,11 +22,8 @@ public class Placeholder : MonoBehaviour
         {
             int tier = Random.Range(0, 100);
             c = new Chest(chest, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0), tier);
-            if (!c.open)
-            {
-                c.chestGameObject.transform.GetChild(0).gameObject.SetActive(false);
-                Debug.Log("setfalse");
-            }
+            itemNameTMP = c.chestGameObject.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<TMP_Text>();
+            itemNameTMP.text = c.chestItem.itemName;
             switch (tier)
             {
                 case < 10:
@@ -45,10 +45,18 @@ public class Placeholder : MonoBehaviour
             }
             clearedRoom = false;
         }
-        if (Input.GetKey(KeyCode.E)) //set active gebeurt niet
+        if (Vector3.Distance(transform.position, chest.transform.position) <  2f)
         {
             chest.transform.GetChild(0).gameObject.SetActive(true);
-        }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                currency -= c.chestItem.price;
+                GetComponent<PlayerAttack>().maxDamage = c.chestItem.damage;
+                Destroy(GameObject.Find("Chest(Clone)"));
+            }
+        }            
+        else if(Vector3.Distance(transform.position, chest.transform.position) >= 2f)
+            chest.transform.GetChild(0).gameObject.SetActive(false);
     }
     void Walk()
     {
